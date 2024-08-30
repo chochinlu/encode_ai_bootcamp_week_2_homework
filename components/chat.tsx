@@ -24,7 +24,8 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import ReactMarkdown from 'react-markdown';
 import { AttachmentIcon, CloseIcon, MenuIcon } from './Icons';
-import { Slider } from "@/components/ui/slider"
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface Message {
   role: 'user' | 'assistant';
@@ -43,6 +44,11 @@ export function Chat() {
   const [reminderMessage, setReminderMessage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [temperature, setTemperature] = useState(1.00);
+  const [jokeTypes, setJokeTypes] = useState({
+    pun: true,
+    knockKnock: true,
+    story: true
+  });
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
@@ -106,7 +112,8 @@ export function Chat() {
         body: JSON.stringify({
           messages: [...messages, newMessage],
           imageUrl,
-          temperature
+          temperature,
+          jokeTypes
         }),
       });
 
@@ -175,6 +182,10 @@ export function Chat() {
     // 這裡可以添加更新 OpenAI model temperature 的邏輯
   }
 
+  const handleJokeTypeChange = (type: 'pun' | 'knockKnock' | 'story') => {
+    setJokeTypes(prev => ({ ...prev, [type]: !prev[type] }));
+  };
+
   return (
     <div className="flex min-h-screen w-full bg-gray-100">
       {/* Top bar for mobile devices */}
@@ -190,6 +201,54 @@ export function Chat() {
           <div className="w-64 h-full bg-white p-4 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h1 className="text-2xl font-bold text-gray-500">Joke Teller</h1>
             <div className="mt-4">
+              <h2 className="text-lg font-semibold mb-2">Joke Types</h2>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+                  <Checkbox
+                    id="pun-mobile"
+                    checked={jokeTypes.pun}
+                    onCheckedChange={() => handleJokeTypeChange('pun')}
+                    className="group-hover:border-blue-500 group-hover:text-blue-500"
+                  />
+                  <label
+                    htmlFor="pun-mobile"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+                  >
+                    Pun
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+                  <Checkbox
+                    id="knockKnock-mobile"
+                    checked={jokeTypes.knockKnock}
+                    onCheckedChange={() => handleJokeTypeChange('knockKnock')}
+                    className="group-hover:border-blue-500 group-hover:text-blue-500"
+                  />
+                  <label
+                    htmlFor="knockKnock-mobile"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+                  >
+                    Knock-knock
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+                  <Checkbox
+                    id="story-mobile"
+                    checked={jokeTypes.story}
+                    onCheckedChange={() => handleJokeTypeChange('story')}
+                    className="group-hover:border-blue-500 group-hover:text-blue-500"
+                  />
+                  <label
+                    htmlFor="story-mobile"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+                  >
+                    Story
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <h2 className="text-lg font-semibold mb-2">Parameters</h2>
               <label className="text-sm font-medium text-gray-700">Temperature: {temperature.toFixed(2)}</label>
               <Slider
                 defaultValue={[1.00]}
@@ -211,6 +270,54 @@ export function Chat() {
       <div className="hidden md:block w-64 bg-white border-r border-gray-300 p-4 flex-shrink-0">
         <h1 className="text-2xl font-bold text-gray-500">Joke Teller</h1>
         <div className="mt-4">
+          <h2 className="text-lg font-semibold mb-2">Joke Types</h2>
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+              <Checkbox
+                id="pun"
+                checked={jokeTypes.pun}
+                onCheckedChange={() => handleJokeTypeChange('pun')}
+                className="group-hover:border-blue-500 group-hover:text-blue-500"
+              />
+              <label
+                htmlFor="pun"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+              >
+                Pun
+              </label>
+            </div>
+            <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+              <Checkbox
+                id="knockKnock"
+                checked={jokeTypes.knockKnock}
+                onCheckedChange={() => handleJokeTypeChange('knockKnock')}
+                className="group-hover:border-blue-500 group-hover:text-blue-500"
+              />
+              <label
+                htmlFor="knockKnock"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+              >
+                Knock-knock
+              </label>
+            </div>
+            <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+              <Checkbox
+                id="story"
+                checked={jokeTypes.story}
+                onCheckedChange={() => handleJokeTypeChange('story')}
+                className="group-hover:border-blue-500 group-hover:text-blue-500"
+              />
+              <label
+                htmlFor="story"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+              >
+                Story
+              </label>
+            </div>
+          </div>
+        </div>
+        <div className="mt-4">
+          <h2 className="text-lg font-semibold mb-2">Parameters</h2>
           <label className="text-sm font-medium text-gray-700">Temperature: {temperature.toFixed(2)}</label>
           <Slider
             defaultValue={[1.00]}
