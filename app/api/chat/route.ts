@@ -9,30 +9,31 @@ const openai = new OpenAI({
 export const runtime = 'edge' // if you decide to use edge runtime
 
 export async function POST(req: Request) {
+  const { messages, imageUrl, temperature } = await req.json();
+
+  // Use the imported prompt
+  const systemPrompt = {
+    role: 'system',
+    content: `${languagePrompt}\n\n${jokeTellerPrompt}`
+  };
+
+  let apiMessages = [systemPrompt, ...messages];
+
+  // If there's an image, add it to the last user message
+  if (imageUrl && apiMessages[apiMessages.length - 1].role === 'user') {
+    apiMessages[apiMessages.length - 1].content = [
+      { type: "text", text: apiMessages[apiMessages.length - 1].content },
+      { type: "image_url", image_url: { url: imageUrl } }
+    ];
+  }
+
   try {
-    const { messages, imageUrl } = await req.json();
-
-    // Use the imported prompt
-    const systemPrompt = {
-      role: 'system',
-      content: `${languagePrompt}\n\n${jokeTellerPrompt}`
-    };
-
-    let apiMessages = [systemPrompt, ...messages];
-
-    // If there's an image, add it to the last user message
-    if (imageUrl && apiMessages[apiMessages.length - 1].role === 'user') {
-      apiMessages[apiMessages.length - 1].content = [
-        { type: "text", text: apiMessages[apiMessages.length - 1].content },
-        { type: "image_url", image_url: { url: imageUrl } }
-      ];
-    }
-
     const stream = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: apiMessages,
+      max_tokens: temperature > 1.3 ? 256 : 512,
+      temperature: temperature,
       stream: true,
-      // max_tokens: 1000
     });
 
     const encoder = new TextEncoder();

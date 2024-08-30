@@ -103,7 +103,11 @@ export function Chat() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ messages: [...messages, newMessage], imageUrl }),
+        body: JSON.stringify({
+          messages: [...messages, newMessage],
+          imageUrl,
+          temperature
+        }),
       });
 
       if (!response.ok) {
@@ -195,6 +199,9 @@ export function Chat() {
                 onValueChange={handleTemperatureChange}
                 className="mt-2"
               />
+              <p className="text-xs text-red-400 mt-3">
+                Warning: Setting temperature above 1.3 may result in incoherent or nonsensical responses.
+              </p>
             </div>
           </div>
         </div>
@@ -213,6 +220,9 @@ export function Chat() {
             onValueChange={handleTemperatureChange}
             className="mt-2"
           />
+          <p className="text-xs text-red-400 mt-3">
+            Warning: Setting temperature above 1.3 may result in incoherent or nonsensical responses.
+          </p>
         </div>
       </div>
 
