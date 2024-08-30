@@ -33,7 +33,7 @@ interface Message {
 
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hello! How can I assist you today?' }
+    { role: 'assistant', content: 'Hello! What kind of joke would you like to hear?' }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isThinking, setIsThinking] = useState(false);
@@ -177,7 +177,7 @@ export function Chat() {
       {isSidebarOpen && (
         <div className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20" onClick={toggleSidebar}>
           <div className="w-64 h-full bg-white p-4 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <h1 className="text-2xl font-bold text-gray-500">Chat Wtih AI</h1>
+            <h1 className="text-2xl font-bold text-gray-500">Joke Teller</h1>
             {/* Add more sidebar content here */}
           </div>
         </div>
@@ -185,7 +185,7 @@ export function Chat() {
 
       {/* Desktop sidebar */}
       <div className="hidden md:block w-64 bg-white border-r border-gray-300 p-4 flex-shrink-0">
-        <h1 className="text-2xl font-bold text-gray-500">Chat With AI</h1>
+        <h1 className="text-2xl font-bold text-gray-500">Joke Teller</h1>
         {/* Add more sidebar content here */}
       </div>
 

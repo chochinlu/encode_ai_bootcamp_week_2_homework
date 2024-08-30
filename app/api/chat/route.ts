@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { languagePrompt, jokeTellerPrompt } from './systemPrompts';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,10 +12,10 @@ export async function POST(req: Request) {
   try {
     const { messages, imageUrl } = await req.json();
 
-    // Add system prompt
+    // Use the imported prompt
     const systemPrompt = {
       role: 'system',
-      content: 'If the user uses Traditional Chinese, please respond in Traditional Chinese. For other languages, please respond in the corresponding language.'
+      content: `${languagePrompt}\n\n${jokeTellerPrompt}`
     };
 
     let apiMessages = [systemPrompt, ...messages];
