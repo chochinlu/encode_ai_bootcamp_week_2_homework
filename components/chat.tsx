@@ -24,6 +24,7 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import ReactMarkdown from 'react-markdown';
 import { AttachmentIcon, CloseIcon, MenuIcon } from './Icons';
+import { Slider } from "@/components/ui/slider"
 
 interface Message {
   role: 'user' | 'assistant';
@@ -41,6 +42,7 @@ export function Chat() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [reminderMessage, setReminderMessage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [temperature, setTemperature] = useState(1.00);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
@@ -164,6 +166,11 @@ export function Chat() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleTemperatureChange = (value: number[]) => {
+    setTemperature(value[0])
+    // 這裡可以添加更新 OpenAI model temperature 的邏輯
+  }
+
   return (
     <div className="flex min-h-screen w-full bg-gray-100">
       {/* Top bar for mobile devices */}
@@ -178,7 +185,17 @@ export function Chat() {
         <div className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20" onClick={toggleSidebar}>
           <div className="w-64 h-full bg-white p-4 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h1 className="text-2xl font-bold text-gray-500">Joke Teller</h1>
-            {/* Add more sidebar content here */}
+            <div className="mt-4">
+              <label className="text-sm font-medium text-gray-700">Temperature: {temperature.toFixed(2)}</label>
+              <Slider
+                defaultValue={[1.00]}
+                max={2.00}
+                min={0.00}
+                step={0.01}
+                onValueChange={handleTemperatureChange}
+                className="mt-2"
+              />
+            </div>
           </div>
         </div>
       )}
@@ -186,7 +203,17 @@ export function Chat() {
       {/* Desktop sidebar */}
       <div className="hidden md:block w-64 bg-white border-r border-gray-300 p-4 flex-shrink-0">
         <h1 className="text-2xl font-bold text-gray-500">Joke Teller</h1>
-        {/* Add more sidebar content here */}
+        <div className="mt-4">
+          <label className="text-sm font-medium text-gray-700">Temperature: {temperature.toFixed(2)}</label>
+          <Slider
+            defaultValue={[1.00]}
+            max={2.00}
+            min={0.00}
+            step={0.01}
+            onValueChange={handleTemperatureChange}
+            className="mt-2"
+          />
+        </div>
       </div>
 
       {/* Main chat area */}
