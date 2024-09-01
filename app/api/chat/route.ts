@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { languagePrompt, jokeTellerPrompt, generatedJokeTypePrompt } from './prompts';
+import { languagePrompt, jokeTellerPrompt, generatedJokeTypePrompt, generatedJokeTonePrompt } from './prompts';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -9,11 +9,12 @@ const openai = new OpenAI({
 export const runtime = 'edge' // if you decide to use edge runtime
 
 export async function POST(req: Request) {
-  const { messages, imageUrl, temperature, jokeTypes } = await req.json();
-  console.log(jokeTypes);
+  const { messages, imageUrl, temperature, jokeTypes, jokeTones } = await req.json();
+  console.log(jokeTypes, jokeTones);
 
   const jokeTypePrompt = generatedJokeTypePrompt(jokeTypes);
-  console.log(jokeTypePrompt);
+  const jokeTonePrompt = generatedJokeTonePrompt(jokeTones);
+  console.log(jokeTypePrompt, jokeTonePrompt);
 
   // Use the imported prompt
   const systemPrompt = {
@@ -21,11 +22,10 @@ export async function POST(req: Request) {
     content: `${languagePrompt}\n\n${jokeTellerPrompt}\n\n`
   };
 
-  // console.log(systemPrompt);
-
+  // Add joke type and tone prompts to the user's last message
   let apiMessages = [systemPrompt, ...messages];
   if (apiMessages[apiMessages.length - 1].role === 'user') {
-    apiMessages[apiMessages.length - 1].content += `\n\n${jokeTypePrompt}`;
+    apiMessages[apiMessages.length - 1].content += `\n\n${jokeTypePrompt}\n\n${jokeTonePrompt}`;
   }
 
   // If there's an image, add it to the last user message
