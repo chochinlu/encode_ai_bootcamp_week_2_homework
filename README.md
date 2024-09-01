@@ -69,6 +69,11 @@ AI Joke Teller is an interactive chat application that uses artificial intellige
 - API routes are located in `app/api/chat/route.ts`
 - Modify `app/api/chat/prompts.ts` to adjust the AI's behavior and joke generation prompts
 
+## TODO
+
+- [ ] Add a message rating feature
+- [ ] Debug mode: Display system prompt
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
