@@ -10,7 +10,7 @@ AI Joke Teller is an interactive chat application that uses artificial intellige
 
 ## Features
 
-### Features
+### Main Features
 - Real-time chat interface
 - Message history
 - Markdown support for messages
@@ -44,11 +44,7 @@ AI Joke Teller is an interactive chat application that uses artificial intellige
 
 ### Installation
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/your-username/ai-joke-teller.git
-   cd ai-joke-teller
-   ```
+1. Clone the repository and change to the project directory.
 
 2. Install dependencies:
    ```
@@ -67,24 +63,14 @@ AI Joke Teller is an interactive chat application that uses artificial intellige
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-## Development and Testing
+## Development
 
-### Development
 - The main application logic is in `components/chat.tsx`
 - API routes are located in `app/api/chat/route.ts`
 - Modify `app/api/chat/prompts.ts` to adjust the AI's behavior and joke generation prompts
 
-
-## Deployment
-
-This application can be easily deployed on platforms like Vercel or Netlify. Make sure to set up your environment variables (OPENAI_API_KEY) in your deployment platform's settings.
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
