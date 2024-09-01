@@ -49,6 +49,12 @@ export function Chat() {
     knockKnock: true,
     story: true
   });
+  const [jokeTones, setJokeTones] = useState({
+    witty: true,
+    sarcastic: true,
+    silly: true,
+    goofy: true
+  });
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
@@ -113,7 +119,8 @@ export function Chat() {
           messages: [...messages, newMessage],
           imageUrl,
           temperature,
-          jokeTypes
+          jokeTypes,
+          jokeTones
         }),
       });
 
@@ -186,6 +193,10 @@ export function Chat() {
     setJokeTypes(prev => ({ ...prev, [type]: !prev[type] }));
   };
 
+  const handleJokeToneChange = (tone: 'witty' | 'sarcastic' | 'silly' | 'goofy') => {
+    setJokeTones(prev => ({ ...prev, [tone]: !prev[tone] }));
+  };
+
   return (
     <div className="flex min-h-screen w-full bg-gray-100">
       {/* Top bar for mobile devices */}
@@ -203,48 +214,43 @@ export function Chat() {
             <div className="mt-4">
               <h2 className="text-lg font-semibold mb-2">Joke Types</h2>
               <div className="space-y-2">
-                <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
-                  <Checkbox
-                    id="pun-mobile"
-                    checked={jokeTypes.pun}
-                    onCheckedChange={() => handleJokeTypeChange('pun')}
-                    className="group-hover:border-blue-500 group-hover:text-blue-500"
-                  />
-                  <label
-                    htmlFor="pun-mobile"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
-                  >
-                    Pun
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
-                  <Checkbox
-                    id="knockKnock-mobile"
-                    checked={jokeTypes.knockKnock}
-                    onCheckedChange={() => handleJokeTypeChange('knockKnock')}
-                    className="group-hover:border-blue-500 group-hover:text-blue-500"
-                  />
-                  <label
-                    htmlFor="knockKnock-mobile"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
-                  >
-                    Knock-knock
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
-                  <Checkbox
-                    id="story-mobile"
-                    checked={jokeTypes.story}
-                    onCheckedChange={() => handleJokeTypeChange('story')}
-                    className="group-hover:border-blue-500 group-hover:text-blue-500"
-                  />
-                  <label
-                    htmlFor="story-mobile"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
-                  >
-                    Story
-                  </label>
-                </div>
+                {Object.entries(jokeTypes).map(([type, checked]) => (
+                  <div key={type} className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+                    <Checkbox
+                      id={`${type}-mobile`}
+                      checked={checked}
+                      onCheckedChange={() => handleJokeTypeChange(type as keyof typeof jokeTypes)}
+                      className="group-hover:border-blue-500 group-hover:text-blue-500"
+                    />
+                    <label
+                      htmlFor={`${type}-mobile`}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+                    >
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4">
+              <h2 className="text-lg font-semibold mb-2">Tones</h2>
+              <div className="space-y-2">
+                {Object.entries(jokeTones).map(([tone, checked]) => (
+                  <div key={tone} className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+                    <Checkbox
+                      id={`${tone}-mobile`}
+                      checked={checked}
+                      onCheckedChange={() => handleJokeToneChange(tone as keyof typeof jokeTones)}
+                      className="group-hover:border-blue-500 group-hover:text-blue-500"
+                    />
+                    <label
+                      htmlFor={`${tone}-mobile`}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+                    >
+                      {tone.charAt(0).toUpperCase() + tone.slice(1)}
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
             <div className="mt-4">
@@ -314,6 +320,27 @@ export function Chat() {
                 Story
               </label>
             </div>
+          </div>
+        </div>
+        <div className="mt-4">
+          <h2 className="text-lg font-semibold mb-2">Tones</h2>
+          <div className="space-y-2">
+            {Object.entries(jokeTones).map(([tone, checked]) => (
+              <div key={tone} className="flex items-center space-x-2 group rounded-md cursor-pointer transition-all duration-200">
+                <Checkbox
+                  id={tone}
+                  checked={checked}
+                  onCheckedChange={() => handleJokeToneChange(tone as keyof typeof jokeTones)}
+                  className="group-hover:border-blue-500 group-hover:text-blue-500"
+                />
+                <label
+                  htmlFor={tone}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 group-hover:text-blue-500 transition-colors duration-200 cursor-pointer flex-grow"
+                >
+                  {tone.charAt(0).toUpperCase() + tone.slice(1)}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
         <div className="mt-4">

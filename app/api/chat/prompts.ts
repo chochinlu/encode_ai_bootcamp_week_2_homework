@@ -97,3 +97,18 @@ export const generatedJokeTypePrompt = (jokeTypes: { pun: boolean; knockKnock: b
     return `Please tell a joke of the ${selectedTypes[Math.floor(Math.random() * selectedTypes.length)]} type.`;
   }
 };
+
+export const generatedJokeTonePrompt = (jokeTones: { witty: boolean; sarcastic: boolean; silly: boolean; goofy: boolean }) => {
+  // Filter and map selected joke tones
+  const selectedTones = Object.entries(jokeTones)
+    .filter(([_, value]) => value)
+    .map(([key, _]) => key);
+
+  // Generate appropriate prompt based on selected tones
+  if (selectedTones.length === 0) {
+    return 'You can use any tone to tell a joke. Not limited to witty, sarcastic, silly, or goofy tones, choose one tone and tell a joke.';
+  } else {
+    const randomTone = selectedTones[Math.floor(Math.random() * selectedTones.length)];
+    return `Please tell a joke using a ${randomTone} tone.`;
+  }
+};
