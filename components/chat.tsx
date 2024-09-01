@@ -33,9 +33,12 @@ interface Message {
   imageUrl?: string;
 }
 
+const welcomeMessage = 'Hello! What topic would you like to hear a joke about? You can enter any topic, such as work, people, animals, food, television, or anything else you can think of!'
+
+
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hello! What kind of joke would you like to hear?' }
+    { role: 'assistant', content: welcomeMessage }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isThinking, setIsThinking] = useState(false);
